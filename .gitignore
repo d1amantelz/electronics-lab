@@ -1,0 +1,10 @@
+# OS and temporary files
+.DS_Store
+*.tmp
+*.bak
+*~
+
+# KiCad temporary files
+*.kicad_prl
+*-save.kicad_pcb
+*-save.kicad_sch
