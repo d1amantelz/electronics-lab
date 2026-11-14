@@ -22,6 +22,7 @@
 | `04` | [**4-Bit Binary Counter**](./04-binary-counter-74hc393) | Mixed-signal interface (NE555 $\to$ 74HC393), 4 cascaded T-flip-flops, successive binary frequency division ($f/2 \dots f/16$), $0000_2 \dots 1111_2$ | [View](./04-binary-counter-74hc393#--working-hardware-photos) |
 | `05` | [**Decade LED Chaser**](./05-running-lights-cd4017) | 5-stage synchronous Johnson counter with 10 decoded active-high outputs (`CD4017BE`), custom flat planar wire routing | [View](./05-running-lights-cd4017#--working-hardware-photos) |
 | `06` | [**Two-Tone Police Siren**](./06-two-tone-siren-555) | Dual-NE555 Frequency Modulation (FM), Pin 5 Control Voltage comparator threshold shifting, LFO $\to$ VCO audio synthesis | [View](./06-two-tone-siren-555#--working-hardware-photos) |
+| `07` | [**1-Bit RS-Latch Memory**](./07-rs-latch-74hc00) | Cross-coupled 2-input NAND gates (`74HC00`), active-LOW ground triggering, autonomous L7805CV regulator with decoupling caps | [View](./07-rs-latch-74hc00#--working-hardware-photos) |
 
 ---
 
@@ -35,6 +36,7 @@
 7. **One-Hot Decade Decoding:** Johnson counter architecture with mutually exclusive 1-of-10 output states.
 8. **Planar Breadboard Routing:** Custom-bent solid-core jumpers for noise reduction, reliable mechanical contact, and clean signal layout.
 9. **Analog Frequency Modulation (FM):** Dynamic manipulation of internal comparator reference thresholds via Pin 5 (Control Voltage) to modulate carrier frequencies in real time.
+10. **Bistable Multivibrators & Static RAM:** Cross-coupling combinatorial logic gates (NAND) with feedback loops to synthesize sequential memory elements (RS-Latch), active-LOW ground assertion, and power rail decoupling.
 
 ---
 
