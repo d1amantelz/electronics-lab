@@ -26,20 +26,18 @@
 In contrast to an RS-latch where separate SET and RESET lines exist (with the hazard of an invalid state $S=R=1$), the **D-Latch** uses a single data wire $D$ and a clock/enable line $\text{CLK}$. The invalid state is physically eliminated because the complementary inputs to the core latch are generated automatically through gate inversion.
 
 ```mermaid
-flowchart LR
+flowchart TD
     subgraph Controls ["Control Inputs"]
         D_IN["DATA Button (D)<br/>+5V active-HIGH"]
         CLK_IN["Clock Line CLK<br/>(+5V / GND)"]
     end
 
     subgraph Gating ["Input Gating (74HC00)"]
-        direction TB
         NAND3["Gate 3 (NAND)<br/>Pins 9, 10 -> 8"]
         NAND4["Gate 4 (NAND)<br/>Pins 12, 13 -> 11"]
     end
 
     subgraph Memory ["Bistable Core Latch (74HC00)"]
-        direction TB
         NAND1["Gate 1 (NAND)<br/>Pins 1, 2 -> 3"]
         NAND2["Gate 2 (NAND)<br/>Pins 4, 5 -> 6"]
     end
