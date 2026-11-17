@@ -25,24 +25,43 @@
 
 In contrast to an RS-latch where separate SET and RESET lines exist (with the hazard of an invalid state $S=R=1$), the **D-Latch** uses a single data wire $D$ and a clock/enable line $\text{CLK}$. The invalid state is physically eliminated because the complementary inputs to the core latch are generated automatically through gate inversion.
 
-```text
-       DATA (D) ───────────┐
-                           ▼
-                        +-----+ (Gate 3)
-         CLK ──────────►| NAND|──────┬─── (Gate 3 Output: S_int) ──┐
-                  │     +-----+      │                             │
-                  │                  │                             ▼
-                  │                  ▼                          +-----+ (Gate 1)
-                  │               +-----+ (Gate 4)       ┌─────►| NAND|──────► Q (Green LED)
-                  └──────────────►| NAND|──► (R_int) ─┐  │  ┌───|     |
-                                  +-----+             │  │  │   +-----+
-                                                      │  │  │      │
-                                                      │  │  │  Feedback Loop
-                                                      ▼  │  │      │
-                                                   +-----+  │      │
-                                                   | NAND|──┴──────┼──► /Q (Red LED)
-                                                   |     |◄────────┘
-                                                   +-----+ (Gate 2)
+```mermaid
+flowchart LR
+    subgraph Controls ["Control Inputs"]
+        D_IN["DATA Button (D)<br/>+5V active-HIGH"]
+        CLK_IN["Clock Line CLK<br/>(+5V / GND)"]
+    end
+
+    subgraph Gating ["Input Gating (74HC00)"]
+        direction TB
+        NAND3["Gate 3 (NAND)<br/>Pins 9, 10 -> 8"]
+        NAND4["Gate 4 (NAND)<br/>Pins 12, 13 -> 11"]
+    end
+
+    subgraph Memory ["Bistable Core Latch (74HC00)"]
+        direction TB
+        NAND1["Gate 1 (NAND)<br/>Pins 1, 2 -> 3"]
+        NAND2["Gate 2 (NAND)<br/>Pins 4, 5 -> 6"]
+    end
+
+    subgraph Outputs ["Visual Indicators"]
+        LED_Q["Green LED (Q)"]
+        LED_NQ["Red LED (/Q)"]
+    end
+
+    D_IN -->|"Pin 9 (Data)"| NAND3
+    CLK_IN -->|"Pin 10 (CLK)"| NAND3
+    CLK_IN -->|"Pin 13 (CLK)"| NAND4
+
+    NAND3 -->|"Pin 8 (S_int)"| NAND1
+    NAND3 -->|"Pin 8 -> 12"| NAND4
+    NAND4 -->|"Pin 11 (R_int)"| NAND2
+
+    NAND1 -->|"Pin 3 (Q)"| LED_Q
+    NAND2 -->|"Pin 6 (/Q)"| LED_NQ
+
+    NAND1 -.->|"Pin 3 -> 4"| NAND2
+    NAND2 -.->|"Pin 6 -> 2"| NAND1
 ```
 
 ### Pinout Mapping (`SN74HC00N`):
