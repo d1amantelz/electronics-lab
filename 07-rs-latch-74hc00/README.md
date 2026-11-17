@@ -23,29 +23,31 @@
 
 ## ⚡ Circuit Architecture & Logic Diagram
 
-```text
-               +5V Regulated (7805)
-                │
-         [ 10 kΩ Pull-up ]
-                ├─── (Pin 1: Input A) ───┐
-  [ SET Button ]                         │
-  (to GND)                               ▼
-                                  +--------------+
-                                  | NAND Gate 1  |── (Pin 3: Q) ──► [ Red LED ]
-                               ┌──| (Pins 1, 2)  |      │
-                               │  +--------------+      │
-                               │         ▲              │
-                 Feedback Loop │         │              │ Feedback Loop
-                 (Pin 6 -> 2)  │         └──────────────┼──────────────┐
-                               │                        │              │
-                               │  +--------------+      │              │
-                               │  | NAND Gate 2  |      ▼              │
-  [ RESET Button ]             └──| (Pins 4, 5)  |── (Pin 6: /Q) ──► [ Green LED ]
-  (to GND)                        +--------------+      │
-                ├─── (Pin 5: Input B) ───┘              │
-         [ 10 kΩ Pull-up ]                              └──────────────┘
-                │
-               +5V Regulated
+```mermaid
+flowchart TD
+    subgraph Inputs ["Control Inputs (Active-LOW)"]
+        BTN_S["SET Button (Pin 1)<br/>10 kΩ pull-up to +5V"]
+        BTN_R["RESET Button (Pin 5)<br/>10 kΩ pull-up to +5V"]
+    end
+
+    subgraph Latch ["Bistable Core (74HC00)"]
+        NAND1["NAND Gate 1<br/>Pins 1, 2 -> 3"]
+        NAND2["NAND Gate 2<br/>Pins 4, 5 -> 6"]
+    end
+
+    subgraph Outputs ["State Indicators"]
+        LED_Q["Red LED (Q)"]
+        LED_NQ["Green LED (/Q)"]
+    end
+
+    BTN_S -->|"Input 1 (SET)"| NAND1
+    BTN_R -->|"Input 5 (RESET)"| NAND2
+
+    NAND1 -->|"Pin 3 (Q)"| LED_Q
+    NAND2 -->|"Pin 6 (/Q)"| LED_NQ
+
+    NAND1 -.->|"Pin 3 -> 4"| NAND2
+    NAND2 -.->|"Pin 6 -> 2"| NAND1
 ```
 
 ### 1. NAND Gate Dominance & Active-LOW Triggering
