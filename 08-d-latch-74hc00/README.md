@@ -14,8 +14,8 @@
 | `Output Decoupling Capacitor`| 1 | `0.1 µF` (ceramic code `104`) | Suppresses high-frequency feedback self-oscillation |
 | `Data Input Button` | 1 | 4-pin tactile switch | Active-HIGH Data line ($D$) input |
 | `Pull-down Resistor` | 1 | `10 kΩ`, 0.25W | Holds idle $D$ input pin securely at logic `0` (GND) |
-| `LED Ballast Resistors` | 2 | `330 Ω` – `470 Ω`, 0.25W | Current limiters for indicator LEDs ($\approx 10\text{ mA}$) |
-| `Indicator LEDs` | 2 | 5mm (Green: $Q$, Red: $\overline{Q}$) | Direct visual feedback of stored memory bit |
+| `LED Ballast Resistors` | 3 | `330 Ω` – `1000 Ω`, 0.25W | Current limiters for indicator LEDs ($\approx 5–10\text{ mA}$) |
+| `Indicator LEDs` | 3 | 5mm (Green: $Q$, Red: $\overline{Q}$, Yellow: $\text{CLK}$) | Visual feedback for memory bit and clock strobe bus |
 | `Primary Power Source` | 1 | 9V PP3 Alkaline Battery | Autonomous DC source |
 | `Prototyping Platform` | 1 | Solderless Breadboard `MB-102` | Planar prototype layout |
 
@@ -84,17 +84,31 @@ flowchart TD
 
 ## 📸 Working Hardware Photos
 
-### Oblique View (Breadboard Layout & Active Storage):
+### General Layout & Breadboard Topology
 ![D-Latch Oblique View](./img/d_latch_74hc00_angle.jpg)
 
-### Top-Down View (Wiring & Single Data Button Interface):
 ![D-Latch Top-Down View](./img/d_latch_74hc00_top.jpg)
+
+### Hardware Operating States & Clock Strobe Verification
+
+1. **Transparent Write State ($\text{CLK} = 1, D = 1$):**  
+   Yellow clock LED illuminated (bus open). Pressing the tactile Data button toggles the output to the red LED:
+   ![CLK=1 D=1 Transparent Write](./img/d_latch_74hc00_clk1_d1.jpg)
+
+2. **Transparent Idle State ($\text{CLK} = 1, D = 0$):**  
+   Yellow clock LED illuminated. Data button released ($D=0$), default green LED active:
+   ![CLK=1 D=0 Transparent Idle](./img/d_latch_74hc00_clk1_d0.jpg)
+
+3. **Hardware Latched / Write-Locked State ($\text{CLK} = 0, D = 1$):**  
+   Yellow clock LED dark ($\text{CLK}$ grounded to GND). Tweezers clamp down on the Data button ($D=1$), but the core memory completely ignores the input — the green LED remains solidly latched:
+   ![CLK=0 D=1 Latched Hold](./img/d_latch_74hc00_clk0_hold.jpg)
 
 ---
 
 ## 🛠️ Verification & Edge Testing
 
 The circuit was verified across all operational boundaries:
-1. **Transparent Mode ($\text{CLK} = 1$):** Pressing and releasing the $D$ button instantly and synchronously toggles the output LEDs ($D=1 \implies \text{Green ON}$; $D=0 \implies \text{Red ON}$).
-2. **Hold Verification ($\text{CLK} = 0$):** Grounding the $\text{CLK}$ line completely freezes the output state. Subsequent toggles of the $D$ button produce zero effect on the LEDs.
-3. **Setup & Hold Dynamic Latching:** Holding the $D$ button down while pulling the $\text{CLK}$ line from $+5\text{V}$ to $GND$ captures and latches the state ($Q=1$) precisely upon the falling transition, confirming dynamic edge storage.
+1. **Clock Strobe Indication (Yellow LED):** Directly monitors whether the latch is transparent ($\text{CLK} = 1$) or in hold mode ($\text{CLK} = 0$), visually mirroring a bus enable line.
+2. **Transparent Mode ($\text{CLK} = 1$):** Pressing and releasing the $D$ button instantly and synchronously toggles the output LEDs ($D=1 \implies \text{Red ON}$; $D=0 \implies \text{Green ON}$).
+3. **Hold Verification ($\text{CLK} = 0$):** Grounding the $\text{CLK}$ line completely freezes the output state. Subsequent toggles or holding of the $D$ button produce zero effect on the LEDs.
+4. **Setup & Hold Dynamic Latching:** Holding the $D$ button down while pulling the $\text{CLK}$ line from $+5\text{V}$ to $GND$ captures and latches the state precisely upon the falling transition, confirming dynamic edge storage.
