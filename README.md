@@ -24,6 +24,7 @@
 | `06` | [**Two-Tone Police Siren**](./06-two-tone-siren-555) | Dual-NE555 Frequency Modulation (FM), Pin 5 Control Voltage comparator threshold shifting, LFO $\to$ VCO audio synthesis | [View](./06-two-tone-siren-555#--working-hardware-photos) |
 | `07` | [**1-Bit RS-Latch Memory**](./07-rs-latch-74hc00) | Cross-coupled 2-input NAND gates (`74HC00`), active-LOW ground triggering, autonomous L7805CV regulator with decoupling caps | [View](./07-rs-latch-74hc00#--working-hardware-photos) |
 | `08` | [**Synchronous D-Latch Memory**](./08-d-latch-74hc00) | 4-NAND Gated D-Latch (`SN74HC00N`), single-wire data input ($D$), clock-gated transparency ($\text{CLK} = 1$), zero-leakage storage mode ($\text{CLK} = 0$), autonomous L7805CV regulator | [View](./08-d-latch-74hc00#--working-hardware-photos) |
+| `09` | [**Quiz Lockout Arbiter**](./09-brain-ring-lockout-74hc00) | Asynchronous 2-channel bus priority arbiter («Brain-Ring»), Active-LOW mutual interlock, dominant-zero gate lockout, resistive power-drop reset (`SN74HC00N` + `L7805CV`) | [View](./09-brain-ring-lockout-74hc00#--working-hardware-photos) |
 
 ---
 
