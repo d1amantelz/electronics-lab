@@ -25,6 +25,7 @@
 | `07` | [**1-Bit RS-Latch Memory**](./07-rs-latch-74hc00) | Cross-coupled 2-input NAND gates (`74HC00`), active-LOW ground triggering, autonomous L7805CV regulator with decoupling caps | [View](./07-rs-latch-74hc00#--working-hardware-photos) |
 | `08` | [**Synchronous D-Latch Memory**](./08-d-latch-74hc00) | 4-NAND Gated D-Latch (`SN74HC00N`), single-wire data input ($D$), clock-gated transparency ($\text{CLK} = 1$), zero-leakage storage mode ($\text{CLK} = 0$), autonomous L7805CV regulator | [View](./08-d-latch-74hc00#--working-hardware-photos) |
 | `09` | [**Quiz Lockout Arbiter**](./09-brain-ring-lockout-74hc00) | Asynchronous 2-channel bus priority arbiter («Brain-Ring»), Active-LOW mutual interlock, dominant-zero gate lockout, resistive power-drop reset (`SN74HC00N` + `L7805CV`) | [View](./09-brain-ring-lockout-74hc00#--working-hardware-photos) |
+| `10` | [**PWM Motor Driver & Power Switch**](./10-pwm-motor-driver-555) | 555-based PWM generator (1%–99% duty cycle), diode steering (1N4148), Low-Side BJT switch (2N3904), Flyback inductive protection, hybrid dual-rail Common Ground (9V + 3.7V Li-Ion) | [View](./10-pwm-motor-driver-555#--working-hardware-photos) |
 
 ---
 
@@ -39,6 +40,8 @@
 8. **Planar Breadboard Routing:** Custom-bent solid-core jumpers for noise reduction, reliable mechanical contact, and clean signal layout.
 9. **Analog Frequency Modulation (FM):** Dynamic manipulation of internal comparator reference thresholds via Pin 5 (Control Voltage) to modulate carrier frequencies in real time.
 10. **Bistable Multivibrators & Static RAM:** Cross-coupling combinatorial logic gates (NAND) with feedback loops to synthesize sequential memory elements (RS-Latch), active-LOW ground assertion, and power rail decoupling.
+11. **PWM Duty Cycle Diode Steering:** Separating capacitor charge and discharge paths via antiparallel switching diodes (`1N4148`) to independently control on/off pulse widths (1%–99% duty cycle) at constant frequency.
+12. **Inductive Kickback & Flyback Protection:** Clamping inductive voltage spikes ($\mathcal{E} = -L \frac{di}{dt}$) generated during coil collapse using a fast recovery diode (`1N4148`) antiparallel across the motor armature, protecting the Low-Side BJT switch (`2N3904`) from reverse breakdown.
 
 ---
 
